@@ -1,6 +1,12 @@
-# Quarkus template
+# Keycloak Integration
 
-This repository serves as a template/scaffold for dockerized Quarkus application.
+This repository is created for development of a Keycloak integration for the LunarFlow application.
+This is to allow for user authentication and authorisation within the application. 
+
+This repository was templated from the [quarkus-template](https://github.com/fontys-lunarflow/quarkus-template) repository.
+
+
+The following sections contain the deployment steps for this repository, and will 
 
 # Requirements
 
@@ -131,14 +137,3 @@ To spin up all the services specified in the docker-compose.yml, run this:
 ```
 docker-compose up
 ```
-
-
-## My changes to the files
-
-- [src/main/docker/Dockerfile.dev](src/main/docker/Dockerfile.dev) --> created a development image
-- [src/main/docker/Dockerfile.native-multistage](src/main/docker/Dockerfile.native-multistage) --> created a multistage GraalVM image for production
-- [src/main/resources/application.properties](src/main/resources/application.properties) --> enabled Quarkus to listen to all network interfaces when in development mode (0.0.0.0)
-- [.dockerignore](.dockerignore) --> Commented out the first line, enabled the whole project to be mounted in the docker image for live reload
-- [docker-compose.yml](docker-compose.yml) --> created a configfile for easier project startup
-
-  
