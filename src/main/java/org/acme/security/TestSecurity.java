@@ -28,4 +28,10 @@ public class TestSecurity {
         }
         return Response.status(403).entity("Not LunarFlowAdmin").build();
     }
+   
+    @GET
+    @Path("/groups")
+    public Response debugGroups() {
+        return Response.ok(securityUtils.getGroupsDebug()).build();
+    }
 }
