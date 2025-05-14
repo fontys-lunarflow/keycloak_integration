@@ -1,11 +1,16 @@
 package org.acme.security;
 
+import io.quarkus.oidc.AccessTokenCredential;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 @Path("/auth")
@@ -29,10 +34,21 @@ public class Authenticate {
     @Path("/profile")
     @Produces(MediaType.APPLICATION_JSON)
     public Map<String, Object> profile() {
+        // Convert roles to a List to make it serializable
+        List<String> rolesList = new ArrayList<>(identity.getRoles());
+        
+        // Extract only the token values we need
+        Map<String, Object> tokenInfo = new HashMap<>();
+        identity.getCredentials().forEach(cred -> {
+            if (cred instanceof AccessTokenCredential) {
+                tokenInfo.put("accessToken", ((AccessTokenCredential)cred).getToken());
+            }
+        });
+        
         return Map.of(
             "username", identity.getPrincipal().getName(),
-            "roles", identity.getRoles(),
-            "token", identity.getCredentials()
+            "roles", rolesList,
+            "tokenInfo", tokenInfo
         );
     }
 }
