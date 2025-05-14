@@ -49,6 +49,10 @@ services:
             PGADMIN_DEFAULT_EMAIL: admin@admin.com
             PGADMIN_DEFAULT_PASSWORD: password
         volumes:
-            - ./volumes/pgadmin:/var/lib/pgadmin
+            - pgadmin_data:/var/lib/pgadmin
         depends_on:
             - db
+
+volumes:
+    pgadmin_data:
+        driver: local
