@@ -11,7 +11,7 @@ import java.util.Set;
 public class User extends PanacheEntity {
     public String name;
 
-    // Store internal permissions (e.g., "view", "edit")
+    // Store internal permissions as a set of strings
     @ElementCollection
     public Set<String> permissions;
 }
