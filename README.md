@@ -1,139 +1,102 @@
-# Keycloak Integration
+# Keycloak Integration for LunarFlow
 
-This repository is created for development of a Keycloak integration for the LunarFlow application.
-This is to allow for user authentication and authorisation within the application. 
+This repository is for development of an integration between a Quarkus application and Keycloak for secure authentication and authorisation in the LunarFlow application.
 
-This repository was templated from the [quarkus-template](https://github.com/fontys-lunarflow/quarkus-template) repository.
+## Overview
 
+This implementation provides:
 
-The following sections contain the deployment steps for this repository, and will 
+- User authentication via Keycloak OIDC
+- Group-based access control (using Keycloak Groups)
+- Internal permission management within the application
+- Permission-based authorisation
+- Secured REST endpoints
+- PostgreSQL data persistence
 
-# Requirements
+### Application Flow
 
-```
-$ docker -v
-Docker version 27.3.1, build ce12230
+1. Users access the application at http://localhost:5000
+2. If not authenticated, they are redirected to Keycloak login page
+3. After successful authentication, they are redirected back to the application
+4. The application uses the SecurityUtils class to check if the user belongs to the allowed groups
+5. Users in either `LunarFlowUsers` or `LunarFlowAdmins` groups can access the application
+6. Additional permissions are managed internally by the application
 
-$ docker-compose -v
-Docker Compose version v2.29.7-desktop.1
+## Getting Started
 
-$ asdf list java
- *openjdk-21
+### Configuration
 
-$ java --version
-openjdk 21 2023-09-19
-OpenJDK Runtime Environment (build 21+35-2513)
-OpenJDK 64-Bit Server VM (build 21+35-2513, mixed mode, sharing)
+The Keycloak integration is configured in `/src/main/resources/application.properties`:
 
-$ quarkus -version
-3.19.3
-```
+### Prerequisites
 
-***IMPORTANT:** docker and docker-compose versions are just my current installed versions, but **matching Java, OpenJDK and Quarkus versions are MANDATORY for the app to work***
+- Java 21
+- Docker and Docker Compose
+- A Keycloak server 
 
-# Build
+### Keycloak Setup
 
-You can build the app in couple of ways.
+To use this integration, you'll need to:
 
-## Production
+1. Set up a Keycloak server
+2. Create an `eclipse` realm (or update to the relm in application.properties)
+3. Create a `lunarflow` client
+   - Client ID: `lunarflow`
+   - Access Type: `confidential`
+   - Standard Flow Enabled: On
+   - Valid Redirect URIs: include `http://localhost:5000/*`
+   - Web Origins: include `+` to allow CORS from any Valid Redirect URI
 
-For production, there are 2 ways you can build the app:
-- Compilation using JVM
-- Compilation using GraalVM (local native build)
-- Compilation using GraalVM (containerised local build)
+4. Create 'LunarFlowUsers' and 'LunarFlowAdmins' groups
+5. Assign users to these groups
+6. Add Group Membership to the Token
+   1. Select "Clients" and click on your "lunarflow" client
+   2. Go to the "Client Scopes" tab
+   3. Click on the default scope (usually "lunarflow-dedicated")
+   4. Go to the "Mappers" tab
+   5. Click "Create" and configure a new mapper:
+       - Name: `groups`
+       - Mapper Type: Group Membership
+       - Token Claim Name: `groups`
+       - Full group path: OFF
+       - Add to ID token: ON
+       - Add to access token: ON
+       - Add to userinfo: ON
 
-If you want to know what is the practical difference, you can take a look for yourself:
-- [Quarkus Runtime Performance](https://quarkus.io/blog/runtime-performance/)
-- [Native Images and Quarkus: JVM-less Java](https://medium.com/bishop-co/native-images-and-quarkus-jvm-less-java-5d4cd4211e41)
+### Testing the Application
 
-### Compilation using JVM
+You can test the security integration by accessing these endpoints:
 
-Before you build the image, you have to compile the app locally. To compile the project, run this:
+- / - Home page, requires authentication
+- /hello - Sample endpoint that persists user info to database
+- /test-security/debug - Shows what groups are included in your token
+- /auth/login - Displays information about the authenticated user
+- /auth/logout - Logs the user out
 
-```
-./mvnw package
-```
+#### Development Mode
 
-If you want a clean packaging process, you can add a **clean** command before the package:
-
-```
-./mvnw clean package
-```
-
-To build the Docker image, run this:
-
-```
-docker build -f src/main/docker/Dockerfile.jvm -t quarkus/test-jvm .
-```
-
-To spin up the container using newly built image, run this:
-
-```
-docker run -i --rm -p 8080:8080 quarkus/test-jvm
-```
-
-This will compile the demo app, archive it in a .jar file, package it in a Docker image and run it. The project will run on [http://localhost:8080](http://localhost:8080). To test the app, try visiting [http://localhost:8080/hello](http://localhost:8080/hello).
-
-### Compilation using GraalVM (local native build)
-
-If you want to use GraalVM, [make sure you have it installed and setup locally](https://quarkus.io/guides/maven-tooling#building-a-native-executable). Make sure it supports OpenJDK and Java versions listed in the [requirements section](#requirements).
-
-Before you build the image, you have to compile the app locally. To compile the project, run this:
-
-```
-./mvnw package -Dnative
-```
-
-If you want a clean packaging process, you can add a **clean** command before the package:
-
-```
-./mvnw clean package -Dnative
-```
-
-To build the Docker image, run this:
-```
-docker build -f src/main/docker/Dockerfile.native -t quarkus/test-native .
-```
-
-To spin up the container using newly built image, run this:
-
-```
-docker run -i --rm -p 8080:8080 quarkus/test-native
-```
-
-### Compilation using GraalVM (containerised local build)
-
-If you want to use GraalVM but don't have it locally, you can use the `-Dquarkus.native.container-build=true` argument to have the image built using a disposable container. For more info, visit [Quarkus documentation](https://quarkus.io/guides/building-native-image#container-runtime).
-
-To streamline this process, you can find the custom-made [Dockerfile.native-multistage](./src/main/docker/Dockerfile.native-multistage).
-
-To compile the app and package it in a Docker image, run this:
-
-```
-docker build -f src/main/docker/Dockerfile.native-multistage -t quarkus/test-multistage .
-```
-
-To spin up the container using newly built image, run this:
-```
-docker run -i --rm -p 8080:8080 quarkus/test-multistage
-```
-
-## Development
-
-To streamline the development process, you can find the custom made [Dockerfile.dev](./src/main/docker/Dockerfile.dev).
-
-The image is pretty barebones, but in conjunction with [docker-compose.yml](./docker-compose.yml) it makes the complete development process.
-
-That includes means that development environment is fully dockerized environment that supports Live Reload.
-
-To build all the images specified in the docker-compose.yml, run this:
-
-```
-docker-compose build
-```
-
-To spin up all the services specified in the docker-compose.yml, run this:
-
-```
+```bash
+# Start the development environment with hot-reload
 docker-compose up
 ```
+
+The application will be available at http://localhost:5000
+
+#### Production Mode
+
+```bash
+# Build the application
+./mvnw package
+
+# Build the Docker image
+docker build -f src/main/docker/Dockerfile.jvm -t lunarflow/keycloak-integration .
+
+# Run the container
+docker run -i --rm -p 8080:8080 lunarflow/keycloak-integration
+```
+
+## Additional Resources
+
+- [Quarkus Security Guide](https://quarkus.io/guides/security)
+- [Quarkus Keycloak Guide](https://quarkus.io/guides/security-openid-connect)
+- [Keycloak Documentation](https://www.keycloak.org/documentation)
