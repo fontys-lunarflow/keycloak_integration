@@ -6,7 +6,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 
 @Path("/test-security")
-public class TestResource {
+public class TestSecurity {
 
     @Inject
     SecurityUtils securityUtils;
