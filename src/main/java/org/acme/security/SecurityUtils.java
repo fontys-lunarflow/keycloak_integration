@@ -2,8 +2,8 @@ package org.acme.security;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import org.acme.models.User;
 import io.quarkus.security.identity.SecurityIdentity;
+import java.util.Set;
 
 @RequestScoped
 public class SecurityUtils {
@@ -12,18 +12,18 @@ public class SecurityUtils {
     SecurityIdentity identity;
 
     public boolean isLunarFlowUser() {
-        return identity.hasRole("LunarFlowUsers");
+        return identity.getRoles().contains("LunarFlowUsers");
     }
 
     public boolean isLunarFlowAdmin() {
-        return identity.hasRole("LunarFlowAdmins");
+        return identity.getRoles().contains("LunarFlowAdmins");
     }
-
-    public boolean hasRole(String role) {
-        return identity.hasRole(role);
+    
+    public Set<String> getGroups() {
+        return identity.getRoles();
     }
-
-    public boolean hasPermission(User user, String permission) {
-        return user.permissions != null && user.permissions.contains(permission);
+    
+    public String getGroupsDebug() {
+        return "Groups: " + String.join(", ", identity.getRoles());
     }
 }
