@@ -60,9 +60,26 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- For OIDC support -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-oidc</artifactId>
+        </dependency>
+        <!-- Keycloak Admin Client -->
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-admin-client</artifactId>
+            <version>22.0.1</version> <!-- Use version compatible with your Keycloak -->
+        </dependency>
+        <!-- Security -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-security</artifactId>
+        </dependency>
+        <!-- For JWT handling -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-jwt</artifactId>
         </dependency>
     </dependencies>
 
