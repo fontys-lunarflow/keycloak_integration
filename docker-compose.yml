@@ -1,4 +1,3 @@
-version: "3"
 services:
     # User API service
     user-api:
