@@ -1,58 +1,23 @@
 version: "3"
 services:
-    # java container
-    test:
-        container_name: quarkus-test-live
+    # User API service
+    user-api:
+        container_name: lunarflow-user-api
         build:
             context: src/main/docker
             dockerfile: Dockerfile.dev
         ports:
             - "5000:8080"
-            - "5005:5005" #debugging port
+            - "5005:5005" # debugging port
         restart: always
         volumes:
             - ./:/work/
         command: ["./mvnw", "quarkus:dev"]
-        depends_on:
-            - db
-
-    # database
-    db:
-        container_name: db
-        image: postgres:17
-        ports:
-            - 5432:5432
-        volumes:
-            # data persistence
-            - ./volumes/postgres:/var/lib/postgresql/data
-            # init script
-            # - ./docker/postgres:/docker-entrypoint-initdb.d
-        restart: always
         environment:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: password
-        healthcheck:
-            test: pg_isready -d postgres -U postgres
-            interval: 5s
-            timeout: 5s
-            retries: 6
-
-
-    # pgadmin
-    pgadmin:
-        image: dpage/pgadmin4
-        container_name: pgadmin4_container
-        restart: always
-        ports:
-            - "8888:80"
-        environment:
-            PGADMIN_DEFAULT_EMAIL: admin@admin.com
-            PGADMIN_DEFAULT_PASSWORD: password
-        volumes:
-            - pgadmin_data:/var/lib/pgadmin
-        depends_on:
-            - db
-
-volumes:
-    pgadmin_data:
-        driver: local
+            # Point to your external Keycloak instance
+            - QUARKUS_OIDC_AUTH_SERVER_URL=http://10.0.70.10:32080/realms/eclipse
+            - QUARKUS_OIDC_CLIENT_ID=lunarflow
+            - QUARKUS_OIDC_CREDENTIALS_SECRET=bLANAvDIeRmlTfCI2JKnMOgz862UmQED
+            # Add CORS settings for working with external services
+            - QUARKUS_HTTP_CORS=true
+            - QUARKUS_HTTP_CORS_ORIGINS=*
