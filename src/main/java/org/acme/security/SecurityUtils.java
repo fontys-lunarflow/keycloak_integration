@@ -24,18 +24,18 @@ public class SecurityUtils {
     JsonWebToken jwt;
 
     // Checks if the user has the LunarFlow user role
-    public boolean isLunarFlowViewer() {
-        return identity.getRoles().contains("LunarFlowViewers") || isLunarFlowEditor();
+    public boolean isLunarflowViewer() {
+        return identity.getRoles().contains("LunarflowViewers") || isLunarflowEditor();
     }
 
     // Checks if the user has the LunarFlow user role
-    public boolean isLunarFlowEditor() {
-        return identity.getRoles().contains("LunarFlowEditors") || isLunarFlowAdmin();
+    public boolean isLunarflowEditor() {
+        return identity.getRoles().contains("LunarflowEditors") || isLunarflowAdmin();
     }
     
     // Checks if the user has the LunarFlow admin role
-    public boolean isLunarFlowAdmin() {
-        return identity.getRoles().contains("LunarFlowAdmins");
+    public boolean isLunarflowAdmin() {
+        return identity.getRoles().contains("LunarflowAdmins");
     }
     
     // Checks if the user has any of the LunarFlow roles
@@ -44,14 +44,14 @@ public class SecurityUtils {
         Set<String> lunarFlowRoles = new HashSet<>();
         
         // Only include the three LunarFlow roles
-        if (allRoles.contains("LunarFlowViewers")) {
-            lunarFlowRoles.add("LunarFlowViewers");
+        if (allRoles.contains("LunarflowViewers")) {
+            lunarFlowRoles.add("LunarflowViewers");
         }
-        if (allRoles.contains("LunarFlowEditors")) {
-            lunarFlowRoles.add("LunarFlowEditors");
+        if (allRoles.contains("LunarflowEditors")) {
+            lunarFlowRoles.add("LunarflowEditors");
         }
-        if (allRoles.contains("LunarFlowAdmins")) {
-            lunarFlowRoles.add("LunarFlowAdmins");
+        if (allRoles.contains("LunarflowAdmins")) {
+            lunarFlowRoles.add("LunarflowAdmins");
         }
         
         return lunarFlowRoles;

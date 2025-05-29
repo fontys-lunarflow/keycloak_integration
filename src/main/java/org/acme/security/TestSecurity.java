@@ -56,7 +56,7 @@ public class TestSecurity {
      */
     @GET
     @Path("/viewer")
-    @RolesAllowed({"LunarFlowViewers", "LunarFlowEditors", "LunarFlowAdmins"})
+    @RolesAllowed({"LunarflowViewers", "LunarflowEditors", "LunarflowAdmins"})
     public Response testViewer() {
         UserDto user = keycloakService.getUserById(securityUtils.getCurrentUserKeycloakId());
         
@@ -74,7 +74,7 @@ public class TestSecurity {
      */
     @GET
     @Path("/editor")
-    @RolesAllowed({"LunarFlowEditors", "LunarFlowAdmins"})
+    @RolesAllowed({"LunarflowEditors", "LunarflowAdmins"})
     public Response testEditor() {
         UserDto user = keycloakService.getUserById(securityUtils.getCurrentUserKeycloakId());
         
@@ -92,7 +92,7 @@ public class TestSecurity {
      */
     @GET
     @Path("/admin")
-    @RolesAllowed("LunarFlowAdmins")
+    @RolesAllowed("LunarflowAdmins")
     public Response testAdmin() {
         UserDto user = keycloakService.getUserById(securityUtils.getCurrentUserKeycloakId());
         
@@ -121,7 +121,7 @@ public class TestSecurity {
      */
     @GET
     @Path("/whoami")
-    @RolesAllowed({"LunarFlowViewers", "LunarFlowEditors", "LunarFlowAdmins"})
+    @RolesAllowed({"LunarflowViewers", "LunarflowEditors", "LunarflowAdmins"})
     public Response whoAmI() {
         UserDto user = keycloakService.getUserById(securityUtils.getCurrentUserKeycloakId());
         return Response.ok(user).build();
@@ -134,7 +134,7 @@ public class TestSecurity {
     @GET
     @Path("/status")
     @Produces(MediaType.TEXT_HTML)
-    @RolesAllowed({"LunarFlowViewers", "LunarFlowEditors", "LunarFlowAdmins"})
+    @RolesAllowed({"LunarflowViewers", "LunarflowEditors", "LunarflowAdmins"})
     public String authStatus() {
         String username = identity.getPrincipal().getName();
         String keycloakId = securityUtils.getCurrentUserKeycloakId();
@@ -166,7 +166,7 @@ public class TestSecurity {
      */
     @GET
     @Path("/token-info")
-    @RolesAllowed("LunarFlowAdmins")
+    @RolesAllowed("LunarflowAdmins")
     public Response tokenInfo() {
         Map<String, Object> tokenInfo = new HashMap<>();
         
@@ -194,12 +194,12 @@ public class TestSecurity {
      * Returns a string representation of the effective access level.
      */
     private String getHighestRole() {
-        if (securityUtils.isLunarFlowAdmin()) {
-            return "LunarFlowAdmins";
-        } else if (securityUtils.isLunarFlowEditor()) {
-            return "LunarFlowEditors";
-        } else if (securityUtils.isLunarFlowViewer()) {
-            return "LunarFlowViewers";
+        if (securityUtils.isLunarflowAdmin()) {
+            return "LunarflowAdmins";
+        } else if (securityUtils.isLunarflowEditor()) {
+            return "LunarflowEditors";
+        } else if (securityUtils.isLunarflowViewer()) {
+            return "LunarflowViewers";
         } else {
             return "None";
         }
