@@ -14,7 +14,7 @@ services:
         command: ["./mvnw", "quarkus:dev"]
         environment:
             # Point to your external Keycloak instance
-            - QUARKUS_OIDC_AUTH_SERVER_URL=http://10.0.70.10:32080/realms/eclipse
+            - QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak.luxdomain.lan/realms/eclipse
             - QUARKUS_OIDC_CLIENT_ID=lunarflow
             - QUARKUS_OIDC_CREDENTIALS_SECRET=bLANAvDIeRmlTfCI2JKnMOgz862UmQED
             # Add CORS settings for working with external services
