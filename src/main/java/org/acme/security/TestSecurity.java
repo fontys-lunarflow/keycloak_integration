@@ -51,7 +51,7 @@ public class TestSecurity {
     }
 
     /**
-     * Viewer-only endpoint to test access for LunarFlow viewers.
+     * Viewer-only endpoint to test access for Lunarflow viewers.
      * Returns user information and confirms viewer access.
      */
     @GET
@@ -69,7 +69,7 @@ public class TestSecurity {
     }
 
     /**
-     * Editor-only endpoint to test access for LunarFlow editors.
+     * Editor-only endpoint to test access for Lunarflow editors.
      * Returns user information and confirms editor access.
      */
     @GET
@@ -87,7 +87,7 @@ public class TestSecurity {
     }
     
     /**
-     * Admin-only endpoint to test access for LunarFlow administrators.
+     * Admin-only endpoint to test access for Lunarflow administrators.
      * Returns user information and confirms admin access.
      */
     @GET
@@ -148,12 +148,12 @@ public class TestSecurity {
         }
         
         return "<html><body>" +
-               "<h1>LunarFlow Authentication Status</h1>" +
+               "<h1>Lunarflow Authentication Status</h1>" +
                "<h2>Logged in as: " + username + "</h2>" +
                "<p><strong>Full Name:</strong> " + user.fullName + "</p>" +
                "<p><strong>Email:</strong> " + user.email + "</p>" +
                "<p><strong>Keycloak ID:</strong> " + keycloakId + "</p>" +
-               "<h3>Your LunarFlow Roles:</h3>" +
+               "<h3>Your Lunarflow Roles:</h3>" +
                "<ul>" + roles.toString() + "</ul>" +
                "<p><strong>Effective Access Level:</strong> " + getHighestRole() + "</p>" +
                "<p><a href=\"/auth/logout\">Logout</a></p>" +

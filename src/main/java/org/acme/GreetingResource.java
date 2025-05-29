@@ -50,9 +50,9 @@ public class GreetingResource {
         info.put("email", user.email);
         info.put("id", user.id);
         info.put("groups", user.groups);
-        info.put("isAdmin", user.isLunarFlowAdmin());
-        info.put("isEditor", user.isLunarFlowEditor());
-        info.put("isViewer", user.isLunarFlowViewer());
+        info.put("isAdmin", user.isLunarflowAdmin());
+        info.put("isEditor", user.isLunarflowEditor());
+        info.put("isViewer", user.isLunarflowViewer());
         
         return Response.ok(info).build();
     }

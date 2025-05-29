@@ -20,15 +20,15 @@ public class UserDto {
         return groups != null && groups.contains(groupName);
     }
     
-    public boolean isLunarFlowAdmin() {
-        return hasGroup("LunarFlowAdmins");
+    public boolean isLunarflowAdmin() {
+        return hasGroup("LunarflowAdmins");
     }
     
-    public boolean isLunarFlowEditor() {
-        return hasGroup("LunarFlowEditors") || isLunarFlowAdmin();
+    public boolean isLunarflowEditor() {
+        return hasGroup("LunarflowEditors") || isLunarflowAdmin();
     }
     
-    public boolean isLunarFlowViewer() {
-        return hasGroup("LunarFlowViewers") || isLunarFlowEditor();
+    public boolean isLunarflowViewer() {
+        return hasGroup("LunarflowViewers") || isLunarflowEditor();
     }
 }
