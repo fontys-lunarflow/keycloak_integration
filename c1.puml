@@ -1,4 +1,4 @@
-@startuml
+@startuml LunarFlow user_api C1 Diagram
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 title Context diagram for LunarFlow System with Keycloak Integration

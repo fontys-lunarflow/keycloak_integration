@@ -1,4 +1,4 @@
-@startuml
+@startuml LunarFlow user_api C2 Diagram
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 title Container diagram for LunarFlow System with Keycloak Integration

@@ -1,4 +1,4 @@
-@startuml
+@startuml LunarFlow user_api C3 Diagram
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 title Component diagram for User System with Keycloak Integration
