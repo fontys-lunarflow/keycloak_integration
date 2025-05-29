@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Container diagram for LunarFlow System with Keycloak Integration
+
+Person(endUser, "End User", "A user of the LunarFlow application")
+Person(adminUser, "Administrator", "Administrative user with system management privileges")
+
+System_Boundary(lunarFlowSystem, "LunarFlow System") {
+    Container(webApp, "Web Application", "JavaScript, React", "Provides the user interface for LunarFlow functionality")
+    
+    Container(content_api, "content_api", "Java, Quarkus", "Provides core business functionality via REST API including user management")
+    
+    Container(user_api, "user_api", "Java, Quarkus", "Handles user-specific functionality and synchronization with Keycloak")
+    
+    ContainerDb(database, "Database", "PostgreSQL", "Stores application data")
+}
+
+System_Ext(keycloak, "Keycloak", "Identity and Access Management system")
+
+Rel(endUser, webApp, "Uses", "HTTPS")
+Rel(adminUser, webApp, "Manages users and configuration", "HTTPS")
+
+Rel(webApp, content_api, "Makes API calls to", "JSON/HTTPS")
+Rel(webApp, user_api, "Makes user-related API calls to", "JSON/HTTPS")
+Rel(webApp, keycloak, "Authenticates via", "OIDC/HTTPS")
+
+Rel(content_api, database, "Reads from and writes to", "JDBC")
+
+Rel(user_api, keycloak, "Verifies tokens and retrieves user info", "REST/HTTPS")
+
+Rel(adminUser, keycloak, "Manages users, groups and roles", "HTTPS")
+
+@enduml

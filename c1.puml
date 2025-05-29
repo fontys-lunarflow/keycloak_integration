@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Context diagram for LunarFlow System with Keycloak Integration
+
+Person(endUser, "End User", "A user of the LunarFlow application")
+Person(adminUser, "Administrator", "Administrative user with system management privileges")
+
+System(lunarFlow, "LunarFlow Application", "Core application providing business functionality with integrated user management")
+
+System_Ext(keycloak, "Keycloak", "Identity and Access Management system for authentication and basic authorization")
+System_Ext(database, "PostgreSQL Database", "Stores application data and extended user properties")
+
+Rel(endUser, lunarFlow, "Uses")
+Rel(adminUser, lunarFlow, "Manages users and system configuration")
+Rel(adminUser, keycloak, "Manages user accounts, groups, and roles")
+
+Rel(lunarFlow, keycloak, "Authenticates users and verifies permissions")
+Rel(lunarFlow, database, "Stores and retrieves application data and extended user properties")
+Rel(endUser, keycloak, "Authenticates via")
+
+@enduml
