@@ -5,16 +5,29 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 @QuarkusTest
 class GreetingResourceTest {
+    
     @Test
-    void testHelloEndpoint() {
+    void testPublicStatusEndpoint() {
         given()
-          .when().get("/hello")
+          .when().get("/api/system/status")
           .then()
              .statusCode(200)
-             .body(is("Hello from Quarkus REST"));
+             .body("status", is("UP"))
+             .body("version", is("1.0.0"))
+             .body("timestamp", notNullValue());
     }
-
+    
+    @Test
+    void testPublicTestSecurityEndpoint() {
+        given()
+          .when().get("/test-security/public")
+          .then()
+             .statusCode(200)
+             .body("message", is("This endpoint is public"))
+             .body("authenticated", is(false));
+    }
 }
