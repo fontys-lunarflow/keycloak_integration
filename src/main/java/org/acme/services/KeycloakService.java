@@ -31,8 +31,9 @@ public class KeycloakService {
     public KeycloakService() {
     }
     
-    // We need a separate initialization method that runs after injection
-    private void initializeRealm() {
+    private void initialiseRealm() {
+    // Extract realm name from the Keycloak URL
+    // Validates URL format and throws helpful errors
         if (authServerUrl == null) {
             throw new IllegalStateException("Auth server URL is null. Check your configuration.");
         }
@@ -48,10 +49,13 @@ public class KeycloakService {
     }
     
     private Keycloak getKeycloakClient() {
+    // Lazy initialization - only creates client when needed
+    // Sets up connection to Keycloak Admin API
+    // Uses client credentials flow for authenticatio
         if (keycloak == null) {
-            // Initialize realm if not done yet
+            // initialise realm if not done yet
             if (realm == null) {
-                initializeRealm();
+                initialiseRealm();
             }
             
             try {
@@ -65,7 +69,7 @@ public class KeycloakService {
                     .build();
             } catch (Exception e) {
                 throw new IllegalStateException(
-                    "Failed to initialize Keycloak client with URL: " + authServerUrl +
+                    "Failed to initialise Keycloak client with URL: " + authServerUrl +
                     ", realm: " + realm +
                     ", client ID: " + clientId +
                     ". Error: " + e.getMessage(), e
