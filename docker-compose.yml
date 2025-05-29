@@ -7,8 +7,8 @@ services:
             context: src/main/docker
             dockerfile: Dockerfile.dev
         ports:
-            - "5000:8080"
-            - "5005:5005" # debugging port
+            - "5000:8080" # Application port
+            - "5005:5005" # Java debugging port
         restart: always
         volumes:
             - ./:/work/
