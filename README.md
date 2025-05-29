@@ -7,11 +7,10 @@ This repository is for development of an integration between a Quarkus applicati
 This implementation provides:
 
 - User authentication via Keycloak OIDC
-- Group-based access control (using Keycloak Groups)
-- Internal permission management within the application
-- Permission-based authorisation
-- Secured REST endpoints
-- PostgreSQL data persistence
+- Role-based access control (using Keycloak Groups)
+- User information retrieval via Keycloak Admin API
+- Secured REST endpoints with role-based protection
+- Hierarchical permission model (Viewers < Editors < Admins)
 
 ### Application Flow
 
@@ -38,30 +37,43 @@ The Keycloak integration is configured in `/src/main/resources/application.prope
 
 To use this integration, you'll need to:
 
-1. Set up a Keycloak server
-2. Create an `eclipse` realm (or update to the relm in application.properties)
-3. Create a `lunarflow` client
+1. Set up a Keycloak server (or use an existing one)
+2. Create an `eclipse` realm (or update the realm in Lunarflow Configuration)
+3. Create the following groups:
+   - `LunarflowViewers` - Basic read access
+   - `LunarflowEditors` - Can edit content
+   - `LunarflowAdmins` - Full administrative access
+
+4. Create a `lunarflow` client with:
    - Client ID: `lunarflow`
    - Access Type: `confidential`
-   - Standard Flow Enabled: On
+   - Standard Flow: `Enabled`
+   - Service Accounts Roles: `Enabled` (critical for Admin API access)
    - Valid Redirect URIs: include `http://localhost:5000/*`
-   - Web Origins: include `+` to allow CORS from any Valid Redirect URI
+   - Web Origins: include `+` to allow CORS
 
-4. Create 'LunarFlowUsers' and 'LunarFlowAdmins' groups
-5. Assign users to these groups
-6. Add Group Membership to the Token
-   1. Select "Clients" and click on your "lunarflow" client
-   2. Go to the "Client Scopes" tab
-   3. Click on the default scope (usually "lunarflow-dedicated")
-   4. Go to the "Mappers" tab
-   5. Click "Create" and configure a new mapper:
-       - Name: `groups`
-       - Mapper Type: Group Membership
-       - Token Claim Name: `groups`
-       - Full group path: OFF
-       - Add to ID token: ON
-       - Add to access token: ON
-       - Add to userinfo: ON
+5. Configure Service Account Permissions:
+   - Go to "Service Account Roles" tab
+   - Select "realm-management" from Client Roles dropdown
+   - Add these roles:
+     - `view-users`
+     - `query-users`
+     - `view-realm`
+
+6. Add Group Membership to Token:
+   - Go to "Client Scopes" tab for your client
+   - Select the dedicated scope (e.g., "lunarflow-dedicated")
+   - Go to "Mappers" tab and create:
+     - Name: `groups`
+     - Mapper Type: `Group Membership`
+     - Token Claim Name: `groups`
+     - Full group path: `OFF`
+     - Add to ID token: `ON`
+     - Add to access token: `ON`
+     - Add to userinfo: `ON`
+
+7. Create test users and assign them to appropriate groups
+
 
 ### Testing the Application
 
