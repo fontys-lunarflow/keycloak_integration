@@ -1,16 +1,16 @@
-@startuml LunarFlow user_api C3 Diagram
+@startuml Lunarflow user_api C3 Diagram
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-title Component diagram for User System with Keycloak Integration
+title Component diagram for Lunarflow's user_api with Keycloak Integration
 
-Person(user, "Application User", "A user of the LunarFlow application")
+Person(user, "Application User", "A user of the Lunarflow application")
 System_Ext(keycloak, "Keycloak", "Identity and Access Management")
 
-Boundary(application, "LunarFlow Application") {
-    Container(api, "User API", "Java/Quarkus", "Provides user management functionality")
+Boundary(application, "Lunarflow Application") {
+    Container(api, "user_api", "Java/Quarkus", "Provides user management functionality")
     
-    Boundary(apiComponents, "API Components") {
-        Component(userResource, "UserResource", "REST Controller", "Exposes user management endpoints at /api/users")
+    Boundary(apiComponents, "user_api Components") {
+        Component(userResource, "UserResource", "REST Controller", "User management endpoints at /api/users")
         Component(greetingResource, "GreetingResource", "REST Controller", "System endpoints at /api/system")
         Component(debugResource, "DebugResource", "REST Controller", "Debug endpoints at /api/debug")
         Component(keycloakService, "KeycloakService", "Service", "Interfaces with Keycloak user operations")
@@ -24,23 +24,22 @@ Rel(user, keycloak, "Authenticates via")
 Rel(user, api, "Makes requests to")
 
 ' Authentication flow
-Rel(api, authComponents, "Routes requests through")
 Rel(authComponents, keycloak, "Verifies tokens with")
 
 ' Request flow
 Rel(api, userResource, "Routes user management requests to") 
 Rel(api, greetingResource, "Routes system requests to")
-Rel(api, debugResource, "Routes debug & security diagnostics to")
+Rel(api, debugResource, "Routes diagnostics requests to")
 
 ' Component relationships
 Rel(userResource, keycloakService, "Uses")
-Rel(userResource, securityUtils, "Uses for authorization")
+Rel(userResource, securityUtils, "Uses for authorisation")
 Rel(greetingResource, keycloakService, "Uses")
-Rel(greetingResource, securityUtils, "Uses for authorization")
+Rel(greetingResource, securityUtils, "Uses for authorisation")
 Rel(debugResource, keycloakService, "Uses")
-Rel(debugResource, securityUtils, "Uses for authorization")
+Rel(debugResource, securityUtils, "Uses for authorisation")
 Rel(keycloakService, userDto, "Creates and populates")
-Rel(keycloakService, keycloak, "Retrieves user data via Admin API")
+Rel(keycloakService, keycloak, "Retrieves user data via Keycloak Admin API")
 
 ' Security components
 Rel(securityUtils, authComponents, "Uses for security checks")

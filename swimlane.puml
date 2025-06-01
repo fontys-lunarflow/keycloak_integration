@@ -1,7 +1,7 @@
-@startuml LunarFlow Authentication Flow
+@startuml Lunarflow Authentication Flow
 |User|
 start
-:Access LunarFlow Application;
+:Access Lunarflow Application;
 
 |#AntiqueWhite|Keycloak|
 :Prompt for credentials;
