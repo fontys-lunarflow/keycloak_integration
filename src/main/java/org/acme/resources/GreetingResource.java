@@ -1,4 +1,4 @@
-package org.acme;
+package org.acme.resources;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;

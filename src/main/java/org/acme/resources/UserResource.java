@@ -14,7 +14,7 @@ import org.acme.services.KeycloakService;
 /**
  * Resource for managing users and user information.
  */
-@Path("/users")
+@Path("/api/user")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
 
@@ -22,14 +22,14 @@ public class UserResource {
     KeycloakService keycloakService;
 
     @GET
-    @Path("/user/{id}")
+    @Path("/id/{id}")
     @RolesAllowed({"LunarflowAdmins"})
     public Response getUserById(@PathParam("id") String id) {
         return Response.ok(keycloakService.getUserById(id)).build();
     }
 
     @GET
-    @Path("/user/username/{username}")
+    @Path("/username/{username}")
     @RolesAllowed({"LunarflowAdmins"})
     public Response getUserByUsername(@PathParam("username") String username) {
         return Response.ok(keycloakService.getUserByUsername(username)).build();

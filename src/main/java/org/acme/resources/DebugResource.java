@@ -1,4 +1,4 @@
-package org.acme.security;
+package org.acme.resources;
 
 import io.quarkus.oidc.AccessTokenCredential;
 import jakarta.annotation.security.RolesAllowed;
@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.acme.dto.UserDto;
+import org.acme.security.SecurityUtils;
 import org.acme.services.KeycloakService;
 import io.quarkus.security.identity.SecurityIdentity;
 
@@ -17,11 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Security testing and diagnostic endpoints.
+ * Testing and diagnostic endpoints.
  */
-@Path("/test-security")
+@Path("/api/debug")
 @Produces(MediaType.APPLICATION_JSON)
-public class TestSecurity {
+public class DebugResource {
 
     @Inject
     SecurityUtils securityUtils;
@@ -113,52 +114,7 @@ public class TestSecurity {
     @Produces(MediaType.TEXT_PLAIN)
     public Response debugGroups() {
         return Response.ok(securityUtils.getGroups()).build();
-    }
-    
-    /**
-     * Endpoint to retrieve the current user's Keycloak ID and basic profile information.
-     * Accessible to all authenticated users.
-     */
-    @GET
-    @Path("/whoami")
-    @RolesAllowed({"LunarflowViewers", "LunarflowEditors", "LunarflowAdmins"})
-    public Response whoAmI() {
-        UserDto user = keycloakService.getUserById(securityUtils.getCurrentUserKeycloakId());
-        return Response.ok(user).build();
-    }
-    
-    /**
-     * HTML status page showing authentication details.
-     * Useful for browser-based testing.
-     */
-    @GET
-    @Path("/status")
-    @Produces(MediaType.TEXT_HTML)
-    @RolesAllowed({"LunarflowViewers", "LunarflowEditors", "LunarflowAdmins"})
-    public String authStatus() {
-        String username = identity.getPrincipal().getName();
-        String keycloakId = securityUtils.getCurrentUserKeycloakId();
-        UserDto user = keycloakService.getUserById(keycloakId);
-        
-        StringBuilder roles = new StringBuilder();
-        if (user.groups != null) {
-            for (String group : user.groups) {
-                roles.append("<li>").append(group).append("</li>");
-            }
-        }
-        
-        return "<html><body>" +
-               "<h1>Lunarflow Authentication Status</h1>" +
-               "<h2>Logged in as: " + username + "</h2>" +
-               "<p><strong>Full Name:</strong> " + user.fullName + "</p>" +
-               "<p><strong>Email:</strong> " + user.email + "</p>" +
-               "<p><strong>Keycloak ID:</strong> " + keycloakId + "</p>" +
-               "<h3>Your Lunarflow Roles:</h3>" +
-               "<ul>" + roles.toString() + "</ul>" +
-               "<p><strong>Effective Access Level:</strong> " + getHighestRole() + "</p>" +
-               "<p><a href=\"/auth/logout\">Logout</a></p>" +
-               "</body></html>";
-    }
+    }  
     
     /**
      * Token information endpoint for debugging JWT tokens.
