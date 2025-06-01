@@ -1,0 +1,53 @@
+@startuml LunarFlow Authentication Flow
+|User|
+start
+:Access LunarFlow Application;
+
+|#AntiqueWhite|Keycloak|
+:Prompt for credentials;
+:Authenticate user;
+:Generate & return token;
+
+|User|
+:Receive token;
+:Make API request with token;
+
+|#LightBlue|UserResource|
+:Receive API request;
+
+|#LightGreen|SecurityUtils|
+:Extract token;
+:Verify token validity;
+:Check user roles & permissions;
+if (Has required role?) then (yes)
+else (no)
+  :Return 403 Forbidden;
+  stop
+endif
+
+|#LightBlue|UserResource|
+:Process API request;
+if (User data needed?) then (yes)
+
+  |#Orange|KeycloakService|
+  :Connect to Keycloak using service account;
+  :Request user information;
+  
+  |#AntiqueWhite|Keycloak|
+  :Process Admin API request;
+  :Return user data;
+  
+  |#Orange|KeycloakService|
+  :Map to UserDto;
+  :Return user information;
+  
+  |#LightBlue|UserResource|
+  :Include user data in response;
+endif
+
+:Generate API response;
+
+|User|
+:Receive API response;
+stop
+@enduml
