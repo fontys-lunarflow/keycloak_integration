@@ -23,7 +23,6 @@ Rel(adminUser, webApp, "Manages users and configuration", "HTTPS")
 
 Rel(webApp, content_api, "Makes API calls to", "JSON/HTTPS")
 Rel(webApp, user_api, "Makes user-related API calls to", "JSON/HTTPS")
-Rel(webApp, keycloak, "Authenticates via", "OIDC/HTTPS")
 
 Rel(content_api, database, "Reads from and writes to", "JDBC")
 

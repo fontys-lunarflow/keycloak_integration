@@ -10,24 +10,39 @@ Boundary(application, "LunarFlow Application") {
     Container(api, "User API", "Java/Quarkus", "Provides user management functionality")
     
     Boundary(apiComponents, "API Components") {
-        Component(userResource, "UserResource", "REST Controller", "Exposes user management endpoints")
-        Component(keycloakService, "KeycloakService", "Service", "Direct interface to Keycloak user operations")
+        Component(userResource, "UserResource", "REST Controller", "Exposes user management endpoints at /api/users")
+        Component(greetingResource, "GreetingResource", "REST Controller", "System endpoints at /api/system")
+        Component(debugResource, "DebugResource", "REST Controller", "Debug endpoints at /api/debug")
+        Component(keycloakService, "KeycloakService", "Service", "Interfaces with Keycloak user operations")
         Component(userDto, "UserDto", "Data Transfer Object", "Represents user data with role information")
         Component(securityUtils, "SecurityUtils", "Utility", "Handles security checks and role verification")
+        Component(authComponents, "Authentication Components", "Quarkus Security", "Handles token validation and security identity")
     }
 }
 
 Rel(user, keycloak, "Authenticates via")
-Rel(user, api, "Uses")
-Rel(api, keycloak, "Verifies tokens")
+Rel(user, api, "Makes requests to")
 
+' Authentication flow
+Rel(api, authComponents, "Routes requests through")
+Rel(authComponents, keycloak, "Verifies tokens with")
+
+' Request flow
+Rel(api, userResource, "Routes user management requests to") 
+Rel(api, greetingResource, "Routes system requests to")
+Rel(api, debugResource, "Routes debug & security diagnostics to")
+
+' Component relationships
 Rel(userResource, keycloakService, "Uses")
-Rel(userResource, securityUtils, "Uses")
-Rel(keycloakService, userDto, "Creates")
-Rel(keycloakService, keycloak, "Retrieves user data from")
-Rel(api, userResource, "Contains")
+Rel(userResource, securityUtils, "Uses for authorization")
+Rel(greetingResource, keycloakService, "Uses")
+Rel(greetingResource, securityUtils, "Uses for authorization")
+Rel(debugResource, keycloakService, "Uses")
+Rel(debugResource, securityUtils, "Uses for authorization")
+Rel(keycloakService, userDto, "Creates and populates")
+Rel(keycloakService, keycloak, "Retrieves user data via Admin API")
 
-' Security relationships
-Rel(securityUtils, keycloak, "Verifies tokens & roles")
+' Security components
+Rel(securityUtils, authComponents, "Uses for security checks")
 
 @enduml
