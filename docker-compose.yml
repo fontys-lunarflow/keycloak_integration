@@ -11,7 +11,7 @@ services:
         restart: always
         volumes:
             - ./:/work/
-        command: ["./mvnw", "quarkus:dev", "-Dkc-admin-client.version=${KC_ADMIN_CLIENT_VERSION}"]
+        command: ["./mvnw", "quarkus:dev"]
         environment:
             # Point to your external Keycloak instance
             - QUARKUS_OIDC_AUTH_SERVER_URL=http://keycloak.luxdomain.lan/realms/eclipse
