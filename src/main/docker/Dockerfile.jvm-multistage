@@ -1,0 +1,31 @@
+## Stage 1 : build with maven builder image
+FROM registry.access.redhat.com/ubi9/openjdk-21:1.21 AS build
+COPY --chown=185 --chmod=0755 mvnw /code/mvnw
+COPY --chown=185 .mvn /code/.mvn
+COPY --chown=185 pom.xml /code/
+USER 185
+WORKDIR /code
+RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.8.1:go-offline
+COPY src /code/src
+RUN ./mvnw package -DskipTests
+
+## Stage 2 : create the docker final image
+FROM registry.access.redhat.com/ubi9/openjdk-21:1.21
+
+ENV LANGUAGE='en_US:en'
+
+LABEL org.opencontainers.image.description="https://github.com/fontys-lunarflow/keycloak_integration"
+
+# COPY --from=build /code/target/*-runner /application
+
+COPY --chown=185 --from=build /code/target/quarkus-app/lib/ /deployments/lib/
+COPY --chown=185 --from=build /code/target/quarkus-app/*.jar /deployments/
+COPY --chown=185 --from=build /code/target/quarkus-app/app/ /deployments/app/
+COPY --chown=185 --from=build /code/target/quarkus-app/quarkus/ /deployments/quarkus/
+
+EXPOSE 8080
+USER 185
+ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+
+ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
