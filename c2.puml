@@ -1,17 +1,17 @@
-@startuml LunarFlow user_api C2 Diagram
+@startuml Lunarflow user_api C2 Diagram
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
-title Container diagram for LunarFlow System with Keycloak Integration
+title Container diagram for Lunarflow System with Keycloak Integration
 
-Person(endUser, "End User", "A user of the LunarFlow application")
+Person(endUser, "End User", "A user of the Lunarflow application")
 Person(adminUser, "Administrator", "Administrative user with system management privileges")
 
-System_Boundary(lunarFlowSystem, "LunarFlow System") {
-    Container(webApp, "Web Application", "JavaScript, React", "Provides the user interface for LunarFlow functionality")
+System_Boundary(LunarflowSystem, "Lunarflow System") {
+    Container(webApp, "Web Application", "JavaScript, React", "Provides the user interface for Lunarflow functionality")
     
     Container(content_api, "content_api", "Java, Quarkus", "Provides core business functionality via REST API including user management")
     
-    Container(user_api, "user_api", "Java, Quarkus", "Handles user-specific functionality and synchronization with Keycloak")
+    Container(user_api, "user_api", "Java, Quarkus", "Handles user-specific functionality and synchronisation with Keycloak")
     
     ContainerDb(database, "Database", "PostgreSQL", "Stores application data")
 }
