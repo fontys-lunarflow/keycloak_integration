@@ -46,16 +46,16 @@ To use this integration, you'll need to:
 
 4. Create a `lunarflow` client with:
    - Client ID: `lunarflow`
-   - Access Type: `confidential`
+   - Enable `Client authentication`
    - Standard Flow: `Enabled`
    - Service Accounts Roles: `Enabled` (critical for Admin API access)
-   - Valid Redirect URIs: include `http://localhost:5000/*`
-   - Web Origins: include `+` to allow CORS
+   - Root URL: Enter the full path URL the Lunarflow application will be served on
+   - Home URL: Enter the full path URL the Lunarflow application will be served on
+   - Valid Redirect URIs: Enter the full path URL the Lunarflow application will be served on + `/*` at the end. I.e. https://lunarflow.luxdomain.work/*
 
 5. Configure Service Account Permissions:
    - Go to "Service Account Roles" tab
-   - Select "realm-management" from Client Roles dropdown
-   - Add these roles:
+   - Press `Assign role` and add the below roles:
      - `view-users`
      - `query-users`
      - `view-realm`
@@ -63,7 +63,7 @@ To use this integration, you'll need to:
 6. Add Group Membership to Token:
    - Go to "Client Scopes" tab for your client
    - Select the dedicated scope (e.g., "lunarflow-dedicated")
-   - Go to "Mappers" tab and create:
+   - Go to "Mappers" tab and configure a new one:
      - Name: `groups`
      - Mapper Type: `Group Membership`
      - Token Claim Name: `groups`
