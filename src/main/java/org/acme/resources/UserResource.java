@@ -1,6 +1,5 @@
 package org.acme.resources;
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -23,28 +22,23 @@ public class UserResource {
 
     @GET
     @Path("/id/{id}")
-    //@RolesAllowed({"LunarflowAdmins"})
     public Response getUserById(@PathParam("id") String id) {
         return Response.ok(keycloakService.getUserById(id)).build();
     }
 
     @GET
-    //@Path("/username/{username}")
-    @RolesAllowed({"LunarflowAdmins"})
     public Response getUserByUsername(@PathParam("username") String username) {
         return Response.ok(keycloakService.getUserByUsername(username)).build();
     }
 
     @GET
     @Path("/group/{groupName}")
-    //@RolesAllowed({"LunarflowAdmins"})
     public Response getUsersByGroup(@PathParam("groupName") String groupName) {
         return Response.ok(keycloakService.getUsersByGroup(groupName)).build();
     }
 
     @GET
     @Path("/all")
-    //@RolesAllowed({"LunarflowAdmins"})
     public Response getAllUsers() {
         return Response.ok(keycloakService.getAllUsers()).build();
     }

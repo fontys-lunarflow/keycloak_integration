@@ -1,7 +1,6 @@
 package org.acme.resources;
 
 import io.quarkus.oidc.AccessTokenCredential;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -57,7 +56,6 @@ public class DebugResource {
      */
     @GET
     @Path("/viewer")
-    @RolesAllowed({"LunarflowViewers", "LunarflowEditors", "LunarflowAdmins"})
     public Response testViewer() {
         UserDto user = keycloakService.getUserById(securityUtils.getCurrentUserKeycloakId());
         
@@ -75,7 +73,6 @@ public class DebugResource {
      */
     @GET
     @Path("/editor")
-    @RolesAllowed({"LunarflowEditors", "LunarflowAdmins"})
     public Response testEditor() {
         UserDto user = keycloakService.getUserById(securityUtils.getCurrentUserKeycloakId());
         
@@ -93,7 +90,6 @@ public class DebugResource {
      */
     @GET
     @Path("/admin")
-    @RolesAllowed("LunarflowAdmins")
     public Response testAdmin() {
         UserDto user = keycloakService.getUserById(securityUtils.getCurrentUserKeycloakId());
         
@@ -122,7 +118,6 @@ public class DebugResource {
      */
     @GET
     @Path("/token-info")
-    @RolesAllowed("LunarflowAdmins")
     public Response tokenInfo() {
         Map<String, Object> tokenInfo = new HashMap<>();
         

@@ -1,6 +1,5 @@
 package org.acme.resources;
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -39,7 +38,6 @@ public class GreetingResource {
     @GET
     @Path("/whoami")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"LunarFlowViewers", "LunarFlowEditors", "LunarFlowAdmins"})
     public Response whoAmI() {
         String keycloakId = securityUtils.getCurrentUserKeycloakId();
         UserDto user = keycloakService.getUserById(keycloakId);
@@ -57,7 +55,6 @@ public class GreetingResource {
     @GET
     @Path("/admin-check")
     @Produces(MediaType.TEXT_PLAIN)
-    @RolesAllowed("LunarFlowAdmins")
     public String adminOnly() {
         return "If you can see this, you have admin access!";
     }
