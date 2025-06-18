@@ -27,6 +27,7 @@ public class UserResource {
     }
 
     @GET
+    @Path("/username/{username}")
     public Response getUserByUsername(@PathParam("username") String username) {
         return Response.ok(keycloakService.getUserByUsername(username)).build();
     }
