@@ -23,13 +23,13 @@ public class UserResource {
 
     @GET
     @Path("/id/{id}")
-    @RolesAllowed({"LunarflowAdmins"})
+    //@RolesAllowed({"LunarflowAdmins"})
     public Response getUserById(@PathParam("id") String id) {
         return Response.ok(keycloakService.getUserById(id)).build();
     }
 
     @GET
-    @Path("/username/{username}")
+    //@Path("/username/{username}")
     @RolesAllowed({"LunarflowAdmins"})
     public Response getUserByUsername(@PathParam("username") String username) {
         return Response.ok(keycloakService.getUserByUsername(username)).build();
@@ -37,14 +37,14 @@ public class UserResource {
 
     @GET
     @Path("/group/{groupName}")
-    @RolesAllowed({"LunarflowAdmins"})
+    //@RolesAllowed({"LunarflowAdmins"})
     public Response getUsersByGroup(@PathParam("groupName") String groupName) {
         return Response.ok(keycloakService.getUsersByGroup(groupName)).build();
     }
 
     @GET
     @Path("/all")
-    @RolesAllowed({"LunarflowAdmins"})
+    //@RolesAllowed({"LunarflowAdmins"})
     public Response getAllUsers() {
         return Response.ok(keycloakService.getAllUsers()).build();
     }
